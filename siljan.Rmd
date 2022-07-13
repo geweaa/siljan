@@ -1,0 +1,179 @@
+---
+title: "siljan"
+author: "George"
+date: '2022-07-12'
+output:
+  bookdown::html_document2:
+    toc: true
+    toc_float: true
+    toc_depth: 3
+    number_sections: true
+    theme: spacelab
+    highlight: textmate
+    df_print: paged
+    code_folding: hide
+    self_contained: false
+    keep_md: false
+    encoding: "UTF-8"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, cache = TRUE)
+library(tidyverse)
+```
+
+
+```{r files}
+seqtab <- read_tsv("ASV_table.tsv", col_types = cols(.default = col_character(),
+                                                     count = col_integer())) %>%
+  group_by(sample) %>% mutate(relab = count / sum(count)) %>% ungroup()
+
+smd <- tibble(sample = c("P25809_1088","P25809_1089","P26201_1085","P26201_1086","P26201_1087"), label = c("filter.1","filter.2","filter.3","GW.a","GW.b"))
+
+tax <- read_tsv("ASV_tax.tsv", col_types = cols(.default = col_character())) %>%
+  mutate(Phylum = gsub("Firmicutes_.", "Firmicutes", Phylum))
+```
+
+
+```{r themes}
+theme_barplot <- function() {
+  theme(
+    axis.title.x = element_text(colour = "black", size = 8),
+    axis.title.y = element_text(colour = "black", size = 8),
+    axis.text.x = element_text(colour = "black", size = 8),
+    axis.text.y = element_text(colour = "black", size = 8, margin = margin(0,-5,0,0, unit = 'mm')),
+    legend.text = element_text(colour = "black", size = 8),
+    strip.background = element_blank(),
+    panel.grid = element_blank(),
+    legend.position = "bottom",
+    aspect.ratio = 0.7,
+    strip.text = element_text(colour = "black", size = 8, hjust = 0.5),
+    panel.background = element_blank(),
+    legend.title = element_blank(),
+    legend.box.background = element_blank(),
+    legend.key = element_blank(),
+    legend.spacing.x = unit(0.5, 'mm'),
+    panel.border = element_blank(),
+    legend.key.size = unit(4.5, "mm"),
+    legend.box.spacing = unit(1, 'mm'),
+    axis.ticks.y = element_blank()
+  )
+}
+```
+
+
+Rarefaction curve to assess if the microbial diversity has been fully captured in the samples
+
+
+```{r rarefaction}
+seqtab %>%
+  inner_join(smd, by = 'sample') %>%
+  select(label, seqid, count) %>%
+  spread(seqid, count, fill = 0) %>%
+  column_to_rownames('label') -> seqtab_matrix
+
+min(rowSums(seqtab_matrix)) %>%
+vegan::rarecurve(seqtab_matrix, sample = ., step = 100, xlab = 'Sequencing depth', ylab = 'Diversity (# ASVs)', label = TRUE)
+```
+
+Barplot on phylum level, depicting the 11 most abundant phyla
+
+
+```{r barplot phylum}
+seqtab %>%
+  inner_join(tax, by = "seqid") %>%
+  group_by(Phylum, sample) %>%
+  # Sum the abundance of each phylum within a sample
+  summarise(relab = sum(relab), .groups = 'drop_last') %>%
+  # Calculate the mean abundance of each phylum over the categories
+  summarise(mean_relab = sum(relab), .groups = 'drop') %>%
+  filter(!is.na(Phylum)) %>%
+  top_n(11, mean_relab) -> t
+
+tax %>%
+  left_join(t %>% transmute(Phylum, topphylum = Phylum), by = "Phylum") %>%
+  replace_na(list("topphylum" = "Other")) -> taxref
+
+seqtab %>%
+  inner_join(smd, by = "sample") %>%
+  inner_join(taxref, by = "seqid") %>% 
+  # Summarize in order to have the sum for each category and topphylum
+  group_by(topphylum, label) %>% 
+  summarise(relab = sum(relab), .groups = 'drop') %>%
+  # Call the plot
+  ggplot(aes(x = fct_rev(label), y = relab, fill = fct_relevel(topphylum, c("Other")))) +
+  labs(x = '', y = 'Relative abundance') +
+  geom_col() +
+  scale_fill_brewer(palette = 'Paired') +
+  coord_flip() + 
+  scale_y_continuous(trans = 'reverse', labels = c('1.0','0.75','0.50','0.25','0')) +
+  theme_barplot()
+```
+
+Barplot on order level, depicting the 11 most abundant orders
+
+
+```{r barplot order}
+seqtab %>%
+  inner_join(tax, by = "seqid") %>%
+  group_by(Order, sample) %>%
+  # Sum the abundance of each phylum within a sample
+  summarise(relab = sum(relab), .groups = 'drop_last') %>%
+  # Calculate the mean abundance of each phylum over the categories
+  summarise(mean_relab = sum(relab), .groups = 'drop') %>%
+  filter(!is.na(Order)) %>%
+  top_n(11, mean_relab) -> t
+
+tax %>%
+  left_join(t %>% transmute(Order, topphylum = Order), by = "Order") %>%
+  replace_na(list("topphylum" = "Other")) -> taxref
+
+seqtab %>%
+  inner_join(smd, by = "sample") %>%
+  inner_join(taxref, by = "seqid") %>% 
+  # Summarize in order to have the sum for each category and topphylum
+  group_by(topphylum, label) %>% 
+  summarise(relab = sum(relab), .groups = 'drop') %>%
+  # Call the plot
+  ggplot(aes(x = fct_rev(label), y = relab, fill = fct_relevel(topphylum, c("Other")))) +
+  labs(x = '', y = 'Relative abundance') +
+  geom_col() +
+  scale_fill_brewer(palette = 'Paired') +
+  coord_flip() + 
+  scale_y_continuous(trans = 'reverse', labels = c('1.0','0.75','0.50','0.25','0')) +
+  theme_barplot()
+```
+
+Barplot on genus level, depicting the 11 most abundant genera
+
+
+```{r barplot genus}
+seqtab %>%
+  inner_join(tax, by = "seqid") %>%
+  group_by(Genus, sample) %>%
+  # Sum the abundance of each phylum within a sample
+  summarise(relab = sum(relab), .groups = 'drop_last') %>%
+  # Calculate the mean abundance of each phylum over the categories
+  summarise(mean_relab = sum(relab), .groups = 'drop') %>%
+  filter(!is.na(Genus)) %>%
+  top_n(11, mean_relab) -> t
+
+tax %>%
+  left_join(t %>% transmute(Genus, topphylum = Genus), by = "Genus") %>%
+  replace_na(list("topphylum" = "Other")) -> taxref
+
+seqtab %>%
+  inner_join(smd, by = "sample") %>%
+  inner_join(taxref, by = "seqid") %>% 
+  # Summarize in order to have the sum for each category and topphylum
+  group_by(topphylum, label) %>% 
+  summarise(relab = sum(relab), .groups = 'drop') %>%
+  # Call the plot
+  ggplot(aes(x = fct_rev(label), y = relab, fill = fct_relevel(topphylum, c("Other")))) +
+  labs(x = '', y = 'Relative abundance') +
+  geom_col() +
+  scale_fill_brewer(palette = 'Paired') +
+  coord_flip() + 
+  scale_y_continuous(trans = 'reverse', labels = c('1.0','0.75','0.50','0.25','0')) +
+  theme_barplot()
+```

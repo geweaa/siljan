@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+<meta name="author" content="George" />
+
+<meta name="date" content="2022-07-12" />
+
+<title>siljan</title>
+
+<script src="siljan_files/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="siljan_files/bootstrap-3.3.5/css/spacelab.min.css" rel="stylesheet" />
+<script src="siljan_files/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="siljan_files/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="siljan_files/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="siljan_files/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="siljan_files/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="siljan_files/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="siljan_files/navigation-1.1/tabsets.js"></script>
+<script src="siljan_files/navigation-1.1/codefolding.js"></script>
+<link href="siljan_files/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
+<script src="siljan_files/highlightjs-9.12.0/highlight.js"></script>
+<link href="siljan_files/pagedtable-1.1/css/pagedtable.css" rel="stylesheet" />
+<script src="siljan_files/pagedtable-1.1/js/pagedtable.js"></script>
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+details > summary > p:only-child {
+  display: inline;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+<style type="text/css">
+.code-folding-btn { margin-bottom: 4px; }
+</style>
+
+
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div id="header">
+
+<div class="btn-group pull-right float-right">
+<button type="button" class="btn btn-default btn-xs btn-secondary btn-sm dropdown-toggle" data-toggle="dropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span>Code</span> <span class="caret"></span></button>
+<ul class="dropdown-menu dropdown-menu-right" style="min-width: 50px;">
+<li><a id="rmd-show-all-code" href="#">Show All Code</a></li>
+<li><a id="rmd-hide-all-code" href="#">Hide All Code</a></li>
+</ul>
+</div>
+
+
+
+<h1 class="title toc-ignore">siljan</h1>
+<h4 class="author">George</h4>
+<h4 class="date">2022-07-12</h4>
+
+</div>
+
+
+<pre class="r"><code>seqtab &lt;- read_tsv(&quot;ASV_table.tsv&quot;, col_types = cols(.default = col_character(),
+                                                     count = col_integer())) %&gt;%
+  group_by(sample) %&gt;% mutate(relab = count / sum(count)) %&gt;% ungroup()
+
+smd &lt;- tibble(sample = c(&quot;P25809_1088&quot;,&quot;P25809_1089&quot;,&quot;P26201_1085&quot;,&quot;P26201_1086&quot;,&quot;P26201_1087&quot;), label = c(&quot;filter.1&quot;,&quot;filter.2&quot;,&quot;filter.3&quot;,&quot;GW.a&quot;,&quot;GW.b&quot;))
+
+tax &lt;- read_tsv(&quot;ASV_tax.tsv&quot;, col_types = cols(.default = col_character())) %&gt;%
+  mutate(Phylum = gsub(&quot;Firmicutes_.&quot;, &quot;Firmicutes&quot;, Phylum))</code></pre>
+<pre class="r"><code>theme_barplot &lt;- function() {
+  theme(
+    axis.title.x = element_text(colour = &quot;black&quot;, size = 8),
+    axis.title.y = element_text(colour = &quot;black&quot;, size = 8),
+    axis.text.x = element_text(colour = &quot;black&quot;, size = 8),
+    axis.text.y = element_text(colour = &quot;black&quot;, size = 8, margin = margin(0,-5,0,0, unit = &#39;mm&#39;)),
+    legend.text = element_text(colour = &quot;black&quot;, size = 8),
+    strip.background = element_blank(),
+    panel.grid = element_blank(),
+    legend.position = &quot;bottom&quot;,
+    aspect.ratio = 0.7,
+    strip.text = element_text(colour = &quot;black&quot;, size = 8, hjust = 0.5),
+    panel.background = element_blank(),
+    legend.title = element_blank(),
+    legend.box.background = element_blank(),
+    legend.key = element_blank(),
+    legend.spacing.x = unit(0.5, &#39;mm&#39;),
+    panel.border = element_blank(),
+    legend.key.size = unit(4.5, &quot;mm&quot;),
+    legend.box.spacing = unit(1, &#39;mm&#39;),
+    axis.ticks.y = element_blank()
+  )
+}</code></pre>
+<p>Rarefaction curve to assess if the microbial diversity has been fully captured in the samples</p>
+<pre class="r"><code>seqtab %&gt;%
+  inner_join(smd, by = &#39;sample&#39;) %&gt;%
+  select(label, seqid, count) %&gt;%
+  spread(seqid, count, fill = 0) %&gt;%
+  column_to_rownames(&#39;label&#39;) -&gt; seqtab_matrix
+
+min(rowSums(seqtab_matrix)) %&gt;%
+vegan::rarecurve(seqtab_matrix, sample = ., step = 100, xlab = &#39;Sequencing depth&#39;, ylab = &#39;Diversity (# ASVs)&#39;, label = TRUE)</code></pre>
+<p><img src="siljan_files/figure-html/rarefaction-1.png" width="672" /></p>
+<p>Barplot on phylum level, depicting the 11 most abundant phyla</p>
+<pre class="r"><code>seqtab %&gt;%
+  inner_join(tax, by = &quot;seqid&quot;) %&gt;%
+  group_by(Phylum, sample) %&gt;%
+  # Sum the abundance of each phylum within a sample
+  summarise(relab = sum(relab), .groups = &#39;drop_last&#39;) %&gt;%
+  # Calculate the mean abundance of each phylum over the categories
+  summarise(mean_relab = sum(relab), .groups = &#39;drop&#39;) %&gt;%
+  filter(!is.na(Phylum)) %&gt;%
+  top_n(11, mean_relab) -&gt; t
+
+tax %&gt;%
+  left_join(t %&gt;% transmute(Phylum, topphylum = Phylum), by = &quot;Phylum&quot;) %&gt;%
+  replace_na(list(&quot;topphylum&quot; = &quot;Other&quot;)) -&gt; taxref
+
+seqtab %&gt;%
+  inner_join(smd, by = &quot;sample&quot;) %&gt;%
+  inner_join(taxref, by = &quot;seqid&quot;) %&gt;% 
+  # Summarize in order to have the sum for each category and topphylum
+  group_by(topphylum, label) %&gt;% 
+  summarise(relab = sum(relab), .groups = &#39;drop&#39;) %&gt;%
+  # Call the plot
+  ggplot(aes(x = fct_rev(label), y = relab, fill = fct_relevel(topphylum, c(&quot;Other&quot;)))) +
+  labs(x = &#39;&#39;, y = &#39;Relative abundance&#39;) +
+  geom_col() +
+  scale_fill_brewer(palette = &#39;Paired&#39;) +
+  coord_flip() + 
+  scale_y_continuous(trans = &#39;reverse&#39;, labels = c(&#39;1.0&#39;,&#39;0.75&#39;,&#39;0.50&#39;,&#39;0.25&#39;,&#39;0&#39;)) +
+  theme_barplot()</code></pre>
+<p><img src="siljan_files/figure-html/barplot%20phylum-1.png" width="672" /></p>
+<p>Barplot on order level, depicting the 11 most abundant orders</p>
+<pre class="r"><code>seqtab %&gt;%
+  inner_join(tax, by = &quot;seqid&quot;) %&gt;%
+  group_by(Order, sample) %&gt;%
+  # Sum the abundance of each phylum within a sample
+  summarise(relab = sum(relab), .groups = &#39;drop_last&#39;) %&gt;%
+  # Calculate the mean abundance of each phylum over the categories
+  summarise(mean_relab = sum(relab), .groups = &#39;drop&#39;) %&gt;%
+  filter(!is.na(Order)) %&gt;%
+  top_n(11, mean_relab) -&gt; t
+
+tax %&gt;%
+  left_join(t %&gt;% transmute(Order, topphylum = Order), by = &quot;Order&quot;) %&gt;%
+  replace_na(list(&quot;topphylum&quot; = &quot;Other&quot;)) -&gt; taxref
+
+seqtab %&gt;%
+  inner_join(smd, by = &quot;sample&quot;) %&gt;%
+  inner_join(taxref, by = &quot;seqid&quot;) %&gt;% 
+  # Summarize in order to have the sum for each category and topphylum
+  group_by(topphylum, label) %&gt;% 
+  summarise(relab = sum(relab), .groups = &#39;drop&#39;) %&gt;%
+  # Call the plot
+  ggplot(aes(x = fct_rev(label), y = relab, fill = fct_relevel(topphylum, c(&quot;Other&quot;)))) +
+  labs(x = &#39;&#39;, y = &#39;Relative abundance&#39;) +
+  geom_col() +
+  scale_fill_brewer(palette = &#39;Paired&#39;) +
+  coord_flip() + 
+  scale_y_continuous(trans = &#39;reverse&#39;, labels = c(&#39;1.0&#39;,&#39;0.75&#39;,&#39;0.50&#39;,&#39;0.25&#39;,&#39;0&#39;)) +
+  theme_barplot()</code></pre>
+<p><img src="siljan_files/figure-html/barplot%20order-1.png" width="672" /></p>
+<p>Barplot on genus level, depicting the 11 most abundant genera</p>
+<pre class="r"><code>seqtab %&gt;%
+  inner_join(tax, by = &quot;seqid&quot;) %&gt;%
+  group_by(Genus, sample) %&gt;%
+  # Sum the abundance of each phylum within a sample
+  summarise(relab = sum(relab), .groups = &#39;drop_last&#39;) %&gt;%
+  # Calculate the mean abundance of each phylum over the categories
+  summarise(mean_relab = sum(relab), .groups = &#39;drop&#39;) %&gt;%
+  filter(!is.na(Genus)) %&gt;%
+  top_n(11, mean_relab) -&gt; t
+
+tax %&gt;%
+  left_join(t %&gt;% transmute(Genus, topphylum = Genus), by = &quot;Genus&quot;) %&gt;%
+  replace_na(list(&quot;topphylum&quot; = &quot;Other&quot;)) -&gt; taxref
+
+seqtab %&gt;%
+  inner_join(smd, by = &quot;sample&quot;) %&gt;%
+  inner_join(taxref, by = &quot;seqid&quot;) %&gt;% 
+  # Summarize in order to have the sum for each category and topphylum
+  group_by(topphylum, label) %&gt;% 
+  summarise(relab = sum(relab), .groups = &#39;drop&#39;) %&gt;%
+  # Call the plot
+  ggplot(aes(x = fct_rev(label), y = relab, fill = fct_relevel(topphylum, c(&quot;Other&quot;)))) +
+  labs(x = &#39;&#39;, y = &#39;Relative abundance&#39;) +
+  geom_col() +
+  scale_fill_brewer(palette = &#39;Paired&#39;) +
+  coord_flip() + 
+  scale_y_continuous(trans = &#39;reverse&#39;, labels = c(&#39;1.0&#39;,&#39;0.75&#39;,&#39;0.50&#39;,&#39;0.25&#39;,&#39;0&#39;)) +
+  theme_barplot()</code></pre>
+<p><img src="siljan_files/figure-html/barplot%20genus-1.png" width="672" /></p>
+
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+<script>
+$(document).ready(function () {
+  window.initializeCodeFolding("hide" === "show");
+});
+</script>
+
+<script>
+$(document).ready(function ()  {
+
+    // temporarily add toc-ignore selector to headers for the consistency with Pandoc
+    $('.unlisted.unnumbered').addClass('toc-ignore')
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

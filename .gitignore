@@ -1,0 +1,10 @@
+.Rproj.user
+.Rhistory
+.RData
+.Ruserdata
+.DS_Store
+ASV_table.tsv
+ASV_tax.tsv
+siljan.Rproj
+siljan_cache
+siljan_files
